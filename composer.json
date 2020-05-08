@@ -1,0 +1,34 @@
+{
+    "name": "cloudstek/scim-filter-parser",
+    "description": "Parser for the SCIM (IETF RFC 7644, System for Cross-domain Identity Management) filter syntax.",
+    "keywords": ["SCIM", "parser", "lexer", "identity", "management", "cross-domain", "protocol", "sync", "users", "groups", "ietf", "rfc7644"],
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Maarten de Boer",
+            "email": "maarten@cloudstek.nl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "Cloudstek\\SCIM\\FilterParser\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Cloudstek\\SCIM\\FilterParser\\Tests\\": "tests/"
+        }
+    },
+    "require": {
+        "php": ">=7.4",
+        "nette/tokenizer": "^3.1",
+        "cloudstek/php-enum": "^1.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^9.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit"
+    }
+}
