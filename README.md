@@ -1,6 +1,8 @@
 # SCIM Filter Parser
 > Parser for the SCIM ([IETF RFC 7644, System for Cross-domain Identity Management](https://tools.ietf.org/html/rfc7644)) filter syntax.
 
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Cloudstek/scim-filter-parser/PHPunit%20Tests)](https://github.com/Cloudstek/scim-filter-parser/actions) [![Coverage Status](https://coveralls.io/repos/github/Cloudstek/scim-filter-parser/badge.svg?branch=develop)](https://coveralls.io/github/Cloudstek/scim-filter-parser?branch=develop) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/?branch=master) [![GitHub](https://img.shields.io/github/license/Cloudstek/scim-filter-parser)](./LICENSE) [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Cloudstek/scim-filter-parser?label=latest&sort=semver)](https://github.com/Cloudstek/scim-filter-parser/releases) [![Packagist Downloads](https://img.shields.io/packagist/dt/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser) [![Packagist Stars](https://img.shields.io/packagist/stars/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser)
+
 ## Installation
 
 This library is available as [composer](https://getcomposer.org/) package and this is the recommended way to install this library.
