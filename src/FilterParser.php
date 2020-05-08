@@ -298,8 +298,10 @@ class FilterParser implements FilterParserInterface
         $nodes = [$leftNode, $rightNode];
 
         // Merge consecutive connectives of the same type into one connective.
-        if (($rightNode instanceof AST\Conjunction && $isConjunction === true)
-            || ($rightNode instanceof AST\Disjunction && $isConjunction === false)) {
+        if (
+            ($rightNode instanceof AST\Conjunction && $isConjunction === true)
+            || ($rightNode instanceof AST\Disjunction && $isConjunction === false)
+        ) {
             $rightNodes = $rightNode->getNodes();
 
             $nodes = array_merge([$leftNode], $rightNodes);
