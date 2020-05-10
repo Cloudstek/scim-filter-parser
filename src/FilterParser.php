@@ -46,7 +46,7 @@ class FilterParser implements FilterParserInterface
                 self::T_BRACKET_CLOSE => '\]',
                 self::T_NEGATION => 'not\s+',
                 self::T_LOG_OP => '\s+(?:and|or)\s+',
-                self::T_COMP_OP => '\s(?:eq|ne|co|sw|ew|gt|lt|ge|le|pr)\s+',
+                self::T_COMP_OP => '\s(?:(?:eq|ne|co|sw|ew|gt|lt|ge|le)\s+|pr)',
                 self::T_NAME => '(?:(?:[^\"]+\:)+)?[\-\_a-z0-9]+(?:\.[\-\_a-z0-9]+)?',
             ],
             'i'

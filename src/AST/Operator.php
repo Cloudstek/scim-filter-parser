@@ -18,6 +18,7 @@ use Cloudstek\Enum\Enum;
  * @method static static LT()
  * @method static static GE()
  * @method static static LE()
+ * @method static static PR()
  */
 class Operator extends Enum
 {
@@ -30,4 +31,5 @@ class Operator extends Enum
     private const LT = 'lt';
     private const GE = 'ge';
     private const LE = 'le';
+    private const PR = 'pr';
 }

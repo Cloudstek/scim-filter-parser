@@ -363,4 +363,32 @@ class ConnectiveTest extends TestCase
         $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[1]->getOperator());
         $this->assertSame('baz', $conjunctionNodes[1]->getValue());
     }
+
+    public function testConjunctionWithPresentComparison()
+    {
+        /** @var AST\Conjunction $conjunction */
+        $conjunction = self::$parser->parse('userName pr and numActivations ge 3');
+
+        $this->assertInstanceOf(AST\Conjunction::class, $conjunction);
+        $this->assertNull($conjunction->getParent());
+
+        /** @var AST\Comparison[] $nodes */
+        $nodes = $conjunction->getNodes();
+
+        $this->assertCount(2, $nodes);
+
+        // Comparison (left) userName pr
+        $this->assertInstanceOf(AST\Comparison::class, $nodes[0]);
+        $this->assertSame($conjunction, $nodes[0]->getParent());
+        $this->assertEquals(new AST\AttributePath(null, ['userName']), $nodes[0]->getAttributePath());
+        $this->assertSame((string)AST\Operator::PR(), (string)$nodes[0]->getOperator());
+        $this->assertNull($nodes[0]->getValue());
+
+        // Comparison (right) numActivations ge 3
+        $this->assertInstanceOf(AST\Comparison::class, $nodes[1]);
+        $this->assertSame($conjunction, $nodes[1]->getParent());
+        $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $nodes[1]->getAttributePath());
+        $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
+        $this->assertSame(3, $nodes[1]->getValue());
+    }
 }

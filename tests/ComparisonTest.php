@@ -152,4 +152,16 @@ class ComparisonTest extends TestCase
         $this->assertSame(AST\Operator::EQ(), $node->getOperator());
         $this->assertNull($node->getValue());
     }
+
+    public function testComparePresent()
+    {
+        /** @var AST\Comparison $node */
+        $node = self::$parser->parse('numActivations pr');
+
+        $this->assertInstanceOf(AST\Comparison::class, $node);
+        $this->assertNull($node->getParent());
+        $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $node->getAttributePath());
+        $this->assertSame(AST\Operator::PR(), $node->getOperator());
+        $this->assertNull($node->getValue());
+    }
 }
