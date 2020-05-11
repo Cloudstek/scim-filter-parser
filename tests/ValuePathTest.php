@@ -35,4 +35,12 @@ class ValuePathTest extends TestCase
 
         self::$parser->parse('name[not (foo eq "bar" and formatted[foo eq "baz"])]');
     }
+
+    public function testValuePathEmptyThrowsException()
+    {
+        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectExceptionMessage('Expected an attribute/value path, opening parenthesis or a negation, got "]".');
+
+        self::$parser->parse('name[]');
+    }
 }

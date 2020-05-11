@@ -20,7 +20,7 @@ class BasicTest extends TestCase
         $this->assertInstanceOf(FilterParser::class, $parser);
     }
 
-    public function testEmptyNegation()
+    public function testEmptyNegationReturnsNull()
     {
         $parser = new FilterParser();
 
@@ -29,7 +29,7 @@ class BasicTest extends TestCase
         $this->assertNull($node);
     }
 
-    public function testEmptyGrouping()
+    public function testEmptyGroupingReturnsNull()
     {
         $parser = new FilterParser();
 
