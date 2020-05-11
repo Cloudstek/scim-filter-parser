@@ -46,11 +46,18 @@ class ComparisonTest extends TestCase
 
     public function testCompareStringValuePath()
     {
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse('name[formatted eq "foobar"]');
+
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(new AST\AttributePath(null, ['name']), $valuePath->getAttributePath());
+
         /** @var AST\Comparison $node */
-        $node = self::$parser->parse('name[formatted eq "foobar"]');
+        $node = $valuePath->getNode();
 
         $this->assertInstanceOf(AST\Comparison::class, $node);
-        $this->assertNull($node->getParent());
+        $this->assertSame($valuePath, $node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'formatted']), $node->getAttributePath());
         $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
         $this->assertSame('foobar', $node->getValue());
@@ -90,13 +97,23 @@ class ComparisonTest extends TestCase
 
     public function testCompareStringSchemeValuePath()
     {
-        /** @var AST\Comparison $node */
-        $node = self::$parser->parse(
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse(
             'urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:name[formatted eq "foobar"]'
         );
 
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(
+            new AST\AttributePath('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User', ['name']),
+            $valuePath->getAttributePath()
+        );
+
+        /** @var AST\Comparison $node */
+        $node = $valuePath->getNode();
+
         $this->assertInstanceOf(AST\Comparison::class, $node);
-        $this->assertNull($node->getParent());
+        $this->assertSame($valuePath, $node->getParent());
         $this->assertEquals(
             new AST\AttributePath('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User', ['name', 'formatted']),
             $node->getAttributePath()

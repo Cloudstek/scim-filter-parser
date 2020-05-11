@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser;
 
+use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathFilterException;
 use Nette\Tokenizer\Exception as TokenizerException;
 
 /**
@@ -198,7 +199,11 @@ class FilterParser implements FilterParserInterface
         $attributePath = new AST\AttributePath($scheme, explode('.', $name));
 
         // Value path (only if not in value path already
-        if ($stream->isNext(self::T_BRACKET_OPEN) && $inValuePath === false) {
+        if ($stream->isNext(self::T_BRACKET_OPEN)) {
+            if ($inValuePath === true) {
+                throw new InvalidValuePathFilterException();
+            }
+
             return $this->parseValuePath($stream, $attributePath);
         }
 
@@ -218,13 +223,25 @@ class FilterParser implements FilterParserInterface
      */
     private function parseValuePath(Tokenizer\Stream $stream, AST\AttributePath $attributePath): AST\Node
     {
+        // Parse node between brackets.
         $stream->matchNext(self::T_BRACKET_OPEN);
 
-        $subNode = $this->parseFilter($stream, true);
+        $node = $this->parseFilter($stream, true);
+
+        if (
+            $node instanceof AST\Connective === false
+            && $node instanceof AST\Comparison === false
+            && $node instanceof AST\Negation === false
+        ) {
+            throw new InvalidValuePathFilterException();
+        }
 
         $stream->matchNext(self::T_BRACKET_CLOSE);
 
-        return $this->prependNodeAttributePath($attributePath, $subNode);
+        // Correct attribute path for node.
+        $this->updateValuePathAttributePath($attributePath, $node);
+
+        return new AST\ValuePath($attributePath, $node);
     }
 
     /**
@@ -318,9 +335,11 @@ class FilterParser implements FilterParserInterface
      * @param AST\AttributePath $attributePath
      * @param AST\Node          $node
      *
+     * @throws TokenizerException
+     *
      * @return AST\Node
      */
-    private function prependNodeAttributePath(AST\AttributePath $attributePath, AST\Node $node): AST\Node
+    private function updateValuePathAttributePath(AST\AttributePath $attributePath, AST\Node $node): AST\Node
     {
         if ($node instanceof AST\Comparison) {
             $names = array_merge($attributePath->getNames(), $node->getAttributePath()->getNames());
@@ -331,19 +350,19 @@ class FilterParser implements FilterParserInterface
         }
 
         if ($node instanceof AST\Negation) {
-            $node->setNode($this->prependNodeAttributePath($attributePath, $node->getNode()));
+            $node->setNode($this->updateValuePathAttributePath($attributePath, $node->getNode()));
 
             return $node;
         }
 
         if ($node instanceof AST\Connective) {
             foreach ($node->getNodes() as $subNode) {
-                $this->prependNodeAttributePath($attributePath, $subNode);
+                $this->updateValuePathAttributePath($attributePath, $subNode);
             }
 
             return $node;
         }
 
-        return $node;
+        throw new InvalidValuePathFilterException();
     }
 }

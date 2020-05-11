@@ -22,11 +22,21 @@ class NegatedTest extends TestCase
 
     public function testCompareStringValuePathNegated()
     {
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse('name[not (formatted eq "foobar")]');
+
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(
+            new AST\AttributePath(null, ['name']),
+            $valuePath->getAttributePath()
+        );
+
         /** @var AST\Negation $node */
-        $node = self::$parser->parse('name[not (formatted eq "foobar")]');
+        $node = $valuePath->getNode();
 
         $this->assertInstanceOf(AST\Negation::class, $node);
-        $this->assertNull($node->getParent());
+        $this->assertSame($valuePath, $node->getParent());
 
         /** @var AST\Comparison $negatedNode */
         $negatedNode = $node->getNode();
@@ -40,11 +50,21 @@ class NegatedTest extends TestCase
 
     public function testCompareStringValuePathNegatedConjunction()
     {
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse('name[not (formatted eq "foobar" and family eq "bar")]');
+
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(
+            new AST\AttributePath(null, ['name']),
+            $valuePath->getAttributePath()
+        );
+
         /** @var AST\Negation $node */
-        $node = self::$parser->parse('name[not (formatted eq "foobar" and family eq "bar")]');
+        $node = $valuePath->getNode();
 
         $this->assertInstanceOf(AST\Negation::class, $node);
-        $this->assertNull($node->getParent());
+        $this->assertSame($valuePath, $node->getParent());
 
         /** @var AST\Conjunction $negatedNode */
         $negatedNode = $node->getNode();

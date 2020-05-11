@@ -50,11 +50,21 @@ class ConnectiveTest extends TestCase
 
     public function testValuePathConjunction()
     {
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse('name[formatted eq "foobar" and length ge 3]');
+
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(
+            new AST\AttributePath(null, ['name']),
+            $valuePath->getAttributePath()
+        );
+
         /** @var AST\Conjunction $conjunction */
-        $conjunction = self::$parser->parse('name[formatted eq "foobar" and length ge 3]');
+        $conjunction = $valuePath->getNode();
 
         $this->assertInstanceOf(AST\Conjunction::class, $conjunction);
-        $this->assertNull($conjunction->getParent());
+        $this->assertSame($valuePath, $conjunction->getParent());
 
         /** @var AST\Comparison[] $nodes */
         $nodes = $conjunction->getNodes();
@@ -106,11 +116,21 @@ class ConnectiveTest extends TestCase
 
     public function testValuePathDisjunction()
     {
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse('name[formatted eq "foobar" or length ge 3]');
+
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(
+            new AST\AttributePath(null, ['name']),
+            $valuePath->getAttributePath()
+        );
+
         /** @var AST\Disjunction $disjunction */
-        $disjunction = self::$parser->parse('name[formatted eq "foobar" or length ge 3]');
+        $disjunction = $valuePath->getNode();
 
         $this->assertInstanceOf(AST\Disjunction::class, $disjunction);
-        $this->assertNull($disjunction->getParent());
+        $this->assertSame($valuePath, $disjunction->getParent());
 
         /** @var AST\Comparison[] $nodes */
         $nodes = $disjunction->getNodes();
