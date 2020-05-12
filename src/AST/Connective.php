@@ -7,7 +7,7 @@ namespace Cloudstek\SCIM\FilterParser\AST;
 /**
  * Logical connective interface.
  */
-interface Connective extends Node
+interface Connective extends Node, \ArrayAccess, \IteratorAggregate, \Countable
 {
     /**
      * Get nodes.

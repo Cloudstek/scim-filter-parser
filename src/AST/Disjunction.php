@@ -7,33 +7,6 @@ namespace Cloudstek\SCIM\FilterParser\AST;
 /**
  * Logical disjunction (OR).
  */
-class Disjunction extends AbstractNode implements Connective
+class Disjunction extends AbstractConnective
 {
-    /** @var Node[] */
-    private array $nodes;
-
-    /**
-     * Logical disjunction (OR).
-     *
-     * @param Node[]    $nodes
-     * @param Node|null $parent
-     */
-    public function __construct(array $nodes, ?Node $parent = null)
-    {
-        parent::__construct($parent);
-
-        $this->nodes = $nodes;
-
-        foreach ($this->nodes as $node) {
-            $node->setParent($this);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getNodes(): array
-    {
-        return $this->nodes;
-    }
 }

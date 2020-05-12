@@ -411,4 +411,80 @@ class ConnectiveTest extends TestCase
         $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
         $this->assertSame(3, $nodes[1]->getValue());
     }
+
+    public function testCountable()
+    {
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        $this->assertCount(2, $conjunction);
+    }
+
+    public function testArrayAccess()
+    {
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        $this->assertTrue(isset($conjunction[0]));
+        $this->assertSame($nodes[0], $conjunction[0]);
+
+        $this->assertTrue(isset($conjunction[1]));
+        $this->assertSame($nodes[1], $conjunction[1]);
+    }
+
+    public function testArrayAccessSetException()
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Conjunction is read-only.');
+
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        $conjunction[0] = new AST\Comparison(new AST\AttributePath(null, ['bar']), AST\Operator::EQ(), 'baz');
+    }
+
+    public function testArrayAccessUnsetException()
+    {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Conjunction is read-only.');
+
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        unset($conjunction[0]);
+    }
+
+    public function testIterator()
+    {
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        $foundNodes = [];
+
+        foreach ($conjunction as $node) {
+            $foundNodes[] = $node;
+        }
+
+        $this->assertEquals($nodes, $foundNodes);
+    }
 }

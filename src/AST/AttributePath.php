@@ -7,7 +7,7 @@ namespace Cloudstek\SCIM\FilterParser\AST;
 /**
  * Attribute path.
  */
-class AttributePath
+class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable
 {
     private ?string $schema;
 
@@ -59,5 +59,58 @@ class AttributePath
     public function getPath(): string
     {
         return implode('.', $this->names);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetExists($offset)
+    {
+        return isset($this->names[$offset]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetGet($offset)
+    {
+        return $this->names[$offset];
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetSet($offset, $value)
+    {
+        throw new \LogicException('Attribute path is read-only.');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function offsetUnset($offset)
+    {
+        throw new \LogicException('Attribute path is read-only.');
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function count()
+    {
+        return count($this->names);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getIterator()
+    {
+        return new \ArrayIterator($this->names);
+    }
+    
+    public function __toString()
+    {
+        return $this->getPath();
     }
 }
