@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Cloudstek\SCIM\FilterParser\AST;
 
 /**
- * Node.
+ * Abstract node.
  */
 abstract class AbstractNode implements Node
 {
     protected ?Node $parent = null;
 
     /**
-     * Node.
+     * Abstract node.
      *
      * @param Node|null $parent
      */
@@ -22,9 +22,7 @@ abstract class AbstractNode implements Node
     }
 
     /**
-     * Get parent node.
-     *
-     * @return Node|null
+     * @inheritDoc
      */
     public function getParent(): ?Node
     {
@@ -32,16 +30,36 @@ abstract class AbstractNode implements Node
     }
 
     /**
-     * Set parent node.
-     *
-     * @param Node}null $node
-     *
-     * @return $this
+     * @inheritDoc
      */
     public function setParent(?Node $node): self
     {
         $this->parent = $node;
 
         return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function hasParent($parent = null, bool $recursive = false): bool
+    {
+        if ($parent === null) {
+            return $this->parent !== null;
+        }
+
+        $foundParent = false;
+
+        if ($parent instanceof Node) {
+            $foundParent = $this->parent === $parent;
+        } elseif (is_string($parent)) {
+            $foundParent = isset($this->parent) && get_class($this->parent) === $parent;
+        }
+
+        if ($recursive === true && isset($this->parent) && $foundParent === false) {
+            return $this->parent->hasParent($parent, true);
+        }
+
+        return $foundParent;
     }
 }
