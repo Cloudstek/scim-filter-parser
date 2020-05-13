@@ -2,6 +2,7 @@
 > Parser for the SCIM ([IETF RFC 7644, System for Cross-domain Identity Management](https://tools.ietf.org/html/rfc7644)) filter syntax.
 
 [![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Cloudstek/scim-filter-parser/PHPunit%20Tests)](https://github.com/Cloudstek/scim-filter-parser/actions) [![Coverage Status](https://coveralls.io/repos/github/Cloudstek/scim-filter-parser/badge.svg?branch=develop)](https://coveralls.io/github/Cloudstek/scim-filter-parser?branch=develop) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/?branch=master) [![GitHub](https://img.shields.io/github/license/Cloudstek/scim-filter-parser)](./LICENSE) [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Cloudstek/scim-filter-parser?label=latest&sort=semver)](https://github.com/Cloudstek/scim-filter-parser/releases) [![Packagist Downloads](https://img.shields.io/packagist/dt/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser) [![Packagist Stars](https://img.shields.io/packagist/stars/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FCloudstek%2Fscim-filter-parser.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2FCloudstek%2Fscim-filter-parser?ref=badge_shield)
 
 ## Installation
 
@@ -52,3 +53,6 @@ At the moment there are a few limitations to be aware of, though in the future t
 * Does not support SCIM v1.0 query filter syntax (only v2.0).
 * Does not support parsing the `path` attribute for `PATCH` requests.
 * Does not come with a "dumper" to provide a nice textual representation of the AST. Instead you can use [`var_dump`](https://www.php.net/manual/en/function.var-dump.php) or [`VarDumper`](https://symfony.com/doc/current/components/var_dumper.html).
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2FCloudstek%2Fscim-filter-parser.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2FCloudstek%2Fscim-filter-parser?ref=badge_large)
