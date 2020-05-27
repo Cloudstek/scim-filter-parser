@@ -2,11 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Cloudstek\SCIM\FilterParser\Tests;
+namespace Cloudstek\SCIM\FilterParser\Tests\AST;
 
 use Cloudstek\SCIM\FilterParser\AST;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Attribute path test.
+ *
+ * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+ */
 class AttributePathTest extends TestCase
 {
     public function testInstantiateWithoutNames()

@@ -7,7 +7,7 @@ namespace Cloudstek\SCIM\FilterParser\AST;
 /**
  * Attribute path.
  */
-class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable
+class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Path
 {
     private ?string $schema;
 
@@ -108,7 +108,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable
     {
         return new \ArrayIterator($this->names);
     }
-    
+
     public function __toString()
     {
         return $this->getPath();

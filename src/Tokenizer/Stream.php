@@ -44,4 +44,14 @@ class Stream extends \Nette\Tokenizer\Stream
 
         return $token;
     }
+
+    /**
+     * Whether we have more tokens in the stream.
+     *
+     * @return bool
+     */
+    public function hasNext(): bool
+    {
+        return $this->position < (count($this->tokens) - 1);
+    }
 }
