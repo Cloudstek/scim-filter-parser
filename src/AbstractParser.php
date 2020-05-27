@@ -68,6 +68,15 @@ abstract class AbstractParser
     }
 
     /**
+     * Parse.
+     *
+     * @param string $input
+     *
+     * @return AST\Node|AST\Path|null
+     */
+    public abstract function parse(string $input);
+
+    /**
      * Parse inner.
      *
      * @param Tokenizer\Stream $stream
@@ -75,9 +84,9 @@ abstract class AbstractParser
      *
      * @throws TokenizerException|\Nette\Tokenizer\Exception
      *
-     * @return AST\Node|null
+     * @return AST\Node|AST\Path|null
      */
-    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false): ?AST\Node
+    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false)
     {
         $node = null;
 
@@ -100,7 +109,7 @@ abstract class AbstractParser
             $node = $this->parseAttributePath($stream, $inValuePath);
         }
 
-        if ($node !== null) {
+        if ($node !== null && $node instanceof AST\Node) {
             // Logical connective
             if ($stream->isNext(self::T_LOG_OP)) {
                 return $this->parseConnective($stream, $node, $inValuePath);
@@ -116,7 +125,7 @@ abstract class AbstractParser
         throw new TokenizerException(
             sprintf(
                 'Expected an attribute/value path, opening parenthesis or a negation, got "%s".',
-                $stream->nextValue()
+                $stream->nextValue() ?? ''
             ),
             $stream
         );
@@ -129,9 +138,9 @@ abstract class AbstractParser
      *
      * @throws \Nette\Tokenizer\Exception
      *
-     * @return AST\Node|null
+     * @return AST\Node|AST\Path|null
      */
-    protected function parseParentheses(Tokenizer\Stream $stream): ?AST\Node
+    protected function parseParentheses(Tokenizer\Stream $stream)
     {
         $stream->matchNext(self::T_PAREN_OPEN);
         $filter = $stream->joinUntil(self::T_PAREN_CLOSE);
@@ -167,6 +176,20 @@ abstract class AbstractParser
 
         $node = $this->parseInner($this->tokenizer->tokenize($filter), $inValuePath);
 
+        if ($node === null) {
+            return null;
+        }
+
+        if ($node instanceof AST\Node === false) {
+            throw new TokenizerException(
+                sprintf(
+                    'Invalid filter in negation, got "%s".',
+                    $stream->nextValue() ?? ''
+                ),
+                $stream
+            );
+        }
+
         return new AST\Negation($node);
     }
 
@@ -188,6 +211,7 @@ abstract class AbstractParser
         $scheme = null;
 
         if (strpos($name, ':') !== false) {
+            /** @var int $lastColonPos */
             $lastColonPos = strrpos($name, ':');
             $scheme = substr($name, 0, $lastColonPos);
             $name = substr($name, $lastColonPos + 1);
@@ -309,6 +333,10 @@ abstract class AbstractParser
         // Parse right hand node
         $rightNode = $this->parseInner($stream, $inValuePath);
 
+        if ($rightNode === null || $rightNode instanceof AST\Node === false) {
+            throw new TokenizerException('Invalid right hand side of comparison.', $stream);
+        }
+
         // Connective nodes
         $nodes = [$leftNode, $rightNode];
 
@@ -361,6 +389,6 @@ abstract class AbstractParser
             return $node;
         }
 
-        throw new InvalidValuePathFilterException();
+        throw new InvalidValuePathException();
     }
 }

@@ -11,6 +11,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
 {
     private ?string $schema;
 
+    /** @var string[] */
     private array $names;
 
     /**
@@ -66,6 +67,10 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
      */
     public function offsetExists($offset)
     {
+        if (is_int($offset) === false) {
+            throw new \InvalidArgumentException('Expected numeric offset.');
+        }
+
         return isset($this->names[$offset]);
     }
 
@@ -74,6 +79,10 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
      */
     public function offsetGet($offset)
     {
+        if (is_int($offset) === false) {
+            throw new \InvalidArgumentException('Expected numeric offset.');
+        }
+
         return $this->names[$offset];
     }
 

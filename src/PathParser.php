@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser;
 
-use Cloudstek\SCIM\FilterParser\Exception\InvalidPatchPathException;
 use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
 use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
 
@@ -39,7 +38,7 @@ class PathParser extends AbstractParser implements PathParserInterface
             throw new TokenizerException(
                 sprintf(
                     'Expected an attribute or value path, got "%s".',
-                    $stream->nextValue()
+                    $stream->nextValue() ?? ''
                 ),
                 $stream
             );
@@ -52,6 +51,7 @@ class PathParser extends AbstractParser implements PathParserInterface
         $scheme = null;
 
         if (strpos($name, ':') !== false) {
+            /** @var int $lastColonPos */
             $lastColonPos = strrpos($name, ':');
             $scheme = substr($name, 0, $lastColonPos);
             $name = substr($name, $lastColonPos + 1);
@@ -70,8 +70,10 @@ class PathParser extends AbstractParser implements PathParserInterface
 
     /**
      * @inheritDoc
+     *
+     * @return AST\Node|AST\Path|null
      */
-    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false): ?AST\Node
+    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false)
     {
         // @codeCoverageIgnoreStart
         if ($inValuePath === false) {

@@ -36,8 +36,8 @@ class Stream extends \Nette\Tokenizer\Stream
                 sprintf(
                     'Unexpected "%s" on line %d, column %d.',
                     trim($token->value),
-                    $line,
-                    $col
+                    (int)$line,
+                    (int)$col
                 )
             );
         }

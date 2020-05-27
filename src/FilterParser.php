@@ -33,7 +33,14 @@ class FilterParser extends AbstractParser implements FilterParserInterface
     {
         $stream = $this->tokenizer->tokenize($input);
 
-        return $this->parseInner($stream);
+        $node = $this->parseInner($stream);
+
+
+        if ($node !== null && $node instanceof AST\Node === false) {
+            throw new TokenizerException('Invalid filter.');
+        }
+
+        return $node;
     }
 
     /**

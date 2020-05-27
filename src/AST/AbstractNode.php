@@ -32,7 +32,7 @@ abstract class AbstractNode implements Node
     /**
      * @inheritDoc
      */
-    public function setParent(?Node $node): self
+    public function setParent(?Node $node): Node
     {
         $this->parent = $node;
 
@@ -52,7 +52,7 @@ abstract class AbstractNode implements Node
 
         if ($parent instanceof Node) {
             $foundParent = $this->parent === $parent;
-        } elseif (is_string($parent)) {
+        } else {
             $foundParent = isset($this->parent) && get_class($this->parent) === $parent;
         }
 
