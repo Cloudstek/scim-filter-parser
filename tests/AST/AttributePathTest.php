@@ -81,6 +81,26 @@ class AttributePathTest extends TestCase
         unset($attributePath[0]);
     }
 
+    public function testArrayAccessWithNonNumericOffset()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected numeric offset.');
+
+        $attributePath = new AST\AttributePath('urn:foo:bar:2.0:baz', ['foo', 'bar']);
+
+        $attributePath['foo'];
+    }
+
+    public function testArrayAccessIssetWithNonNumericOffset()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected numeric offset.');
+
+        $attributePath = new AST\AttributePath('urn:foo:bar:2.0:baz', ['foo', 'bar']);
+
+        isset($attributePath['foo']);
+    }
+
     public function testIterator()
     {
         $attributePath = new AST\AttributePath('urn:foo:bar:2.0:baz', ['foo', 'bar']);

@@ -6,16 +6,14 @@ namespace Cloudstek\SCIM\FilterParser\Tests;
 
 use Cloudstek\SCIM\FilterParser\AST;
 use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
-use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
 use Cloudstek\SCIM\FilterParser\PathParser;
 use Cloudstek\SCIM\FilterParser\PathParserInterface;
+use Nette\Tokenizer;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Path parser tests.
  *
- * @covers \Cloudstek\SCIM\FilterParser\Tokenizer\Tokenizer
- * @covers \Cloudstek\SCIM\FilterParser\Tokenizer\Stream
  * @covers \Cloudstek\SCIM\FilterParser\AbstractParser
  * @covers \Cloudstek\SCIM\FilterParser\PathParser
  */
@@ -44,39 +42,39 @@ class PathParserTest extends TestCase
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
      * @covers \Cloudstek\SCIM\FilterParser\AST\ValuePath
      * @covers \Cloudstek\SCIM\FilterParser\AST\Comparison
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\TokenizerException
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testNegationAtStartThrowsException()
     {
-        $this->expectException(TokenizerException::class);
+        $this->expectException(Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Expected an attribute or value path, got "not ".'
+            "Unexpected 'not ' on line 1, column 1."
         );
 
         self::$parser->parse('not ()');
     }
 
     /**
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\TokenizerException
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testParenthesesAtStartThrowsException()
     {
-        $this->expectException(TokenizerException::class);
+        $this->expectException(Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Expected an attribute or value path, got "(".'
+            "Unexpected '(' on line 1, column 1."
         );
 
         self::$parser->parse('()');
     }
 
     /**
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\TokenizerException
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testUnexpectedTypeAtStartThrowsException()
     {
-        $this->expectException(TokenizerException::class);
+        $this->expectException(Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Expected an attribute or value path, got " and ".'
+            "Unexpected ' and ' on line 1, column 1."
         );
 
         self::$parser->parse(' and userName eq "foobar"');
@@ -178,12 +176,13 @@ class PathParserTest extends TestCase
     //region Connectives
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testConjunctionThrowsException()
     {
         $this->expectException(\Nette\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Unexpected "eq" on line 1, column 9.'
+            'Unexpected  eq  on line 1, column 9.'
         );
 
         self::$parser->parse('userName eq "foobar" and numActivations ge 3');
@@ -191,12 +190,13 @@ class PathParserTest extends TestCase
 
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testDisjunctionThrowsException()
     {
         $this->expectException(\Nette\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Unexpected "eq" on line 1, column 9.'
+            'Unexpected  eq  on line 1, column 9.'
         );
 
         self::$parser->parse('userName eq "foobar" or numActivations ge 3');
@@ -206,12 +206,13 @@ class PathParserTest extends TestCase
     //region Comparisons
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testComparisonThrowsException()
     {
         $this->expectException(\Nette\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Unexpected "eq" on line 1, column 9.'
+            'Unexpected  eq  on line 1, column 9.'
         );
 
         self::$parser->parse('userName eq "foobar"');
@@ -219,12 +220,14 @@ class PathParserTest extends TestCase
 
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
+     *
      */
     public function testSubAttributeComparisonThrowsException()
     {
         $this->expectException(\Nette\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Unexpected "eq" on line 1, column 15.'
+            'Unexpected  eq  on line 1, column 15.'
         );
 
         self::$parser->parse('name.formatted eq "foobar"');
@@ -232,12 +235,13 @@ class PathParserTest extends TestCase
 
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testAttributeWithSchemeComparisonThrowsException()
     {
         $this->expectException(\Nette\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Unexpected "eq" on line 1, column 68.'
+            'Unexpected  eq  on line 1, column 68.'
         );
 
         self::$parser->parse('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User:userName eq "foobar"');
@@ -245,12 +249,13 @@ class PathParserTest extends TestCase
 
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testSubAttributeWithSchemeComparisonThrowsException()
     {
         $this->expectException(\Nette\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
-            'Unexpected "eq" on line 1, column 74.'
+            'Unexpected  eq  on line 1, column 74.'
         );
 
         self::$parser->parse(
@@ -410,13 +415,12 @@ class PathParserTest extends TestCase
 
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\TokenizerException
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testValuePathNestedThrowsException()
     {
-        $this->expectException(InvalidValuePathException::class);
-        $this->expectExceptionMessage('Invalid value path.');
+        $this->expectException(Tokenizer\Exception::class);
+        $this->expectExceptionMessage('Unexpected formatted on line 1, column 6.');
 
         self::$parser->parse('name[formatted[foo eq "bar"]]');
     }
@@ -425,25 +429,24 @@ class PathParserTest extends TestCase
      * @covers \Cloudstek\SCIM\FilterParser\AST\AbstractNode
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
      * @covers \Cloudstek\SCIM\FilterParser\AST\Comparison
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\TokenizerException
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testValuePathComplexNestedThrowsException()
     {
-        $this->expectException(InvalidValuePathException::class);
-        $this->expectExceptionMessage('Invalid value path.');
+        $this->expectException(Tokenizer\Exception::class);
+        $this->expectExceptionMessage('Unexpected formatted on line 1, column 18.');
 
         self::$parser->parse('name[not (foo eq "bar" and formatted[foo eq "baz"])]');
     }
 
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException
-     * @covers \Cloudstek\SCIM\FilterParser\Exception\TokenizerException
+     * @covers \Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException
      */
     public function testValuePathEmptyThrowsException()
     {
-        $this->expectException(InvalidValuePathException::class);
+        $this->expectException(Tokenizer\Exception::class);
+        $this->expectExceptionMessage('Unexpected [ on line 1, column 5.');
 
         self::$parser->parse('name[]');
     }
@@ -477,7 +480,7 @@ class PathParserTest extends TestCase
 
     public function testValuePathWithSubAttributeShouldBeEndOfPath()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(Tokenizer\Exception::class);
         $this->expectExceptionMessage("Unexpected '.baz.fooba' on line 1, column 19.");
 
         self::$parser->parse('name[foo eq "bar"].baz.foobar');

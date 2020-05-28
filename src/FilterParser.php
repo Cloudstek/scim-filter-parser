@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cloudstek\SCIM\FilterParser;
 
 use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
-use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
+use Nette\Tokenizer;
 
 /**
  * SCIM Filter Parser.
@@ -25,7 +25,7 @@ class FilterParser extends AbstractParser implements FilterParserInterface
      *
      * @param string $input Filter.
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\Node|null
      */
@@ -33,27 +33,6 @@ class FilterParser extends AbstractParser implements FilterParserInterface
     {
         $stream = $this->tokenizer->tokenize($input);
 
-        $node = $this->parseInner($stream);
-
-
-        if ($node !== null && $node instanceof AST\Node === false) {
-            throw new TokenizerException('Invalid filter.');
-        }
-
-        return $node;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    protected function parseValuePath(Tokenizer\Stream $stream, AST\AttributePath $attributePath): AST\ValuePath
-    {
-        $valuePath = parent::parseValuePath($stream, $attributePath);
-
-        if ($stream->isNext(self::T_SUBATTR)) {
-            throw new InvalidValuePathException($stream, 'Invalid value path, unexpected sub attribute.');
-        }
-
-        return $valuePath;
+        return $this->parseInner($stream);
     }
 }

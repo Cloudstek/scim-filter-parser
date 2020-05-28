@@ -6,6 +6,8 @@ namespace Cloudstek\SCIM\FilterParser;
 
 use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
 use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
+use Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException;
+use Nette\Tokenizer;
 
 /**
  * SCIM Path Parser.
@@ -25,7 +27,7 @@ class PathParser extends AbstractParser implements PathParserInterface
      *
      * @param string $input Attribute path..
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\Path
      */
@@ -33,59 +35,29 @@ class PathParser extends AbstractParser implements PathParserInterface
     {
         $stream = $this->tokenizer->tokenize($input);
 
-        // Expect attribute or value path.
-        if ($stream->isNext(self::T_NAME) === false) {
-            throw new TokenizerException(
-                sprintf(
-                    'Expected an attribute or value path, got "%s".',
-                    $stream->nextValue() ?? ''
-                ),
-                $stream
-            );
-        }
-
-        // Get attribute name
-        $name = $stream->matchNext(self::T_NAME)->value;
-
-        // Attribute scheme
-        $scheme = null;
-
-        if (strpos($name, ':') !== false) {
-            /** @var int $lastColonPos */
-            $lastColonPos = strrpos($name, ':');
-            $scheme = substr($name, 0, $lastColonPos);
-            $name = substr($name, $lastColonPos + 1);
-        }
-
         // Attribute path
-        $attributePath = new AST\AttributePath($scheme, explode('.', $name));
+        $attributePath = $this->parseAttributePath($stream);
 
-        if ($stream->hasNext() === false) {
-            return $attributePath;
+        if ($stream->nextToken() !== null) {
+            throw new UnexpectedValueException($stream);
         }
 
-        // Value path
-        return $this->parseValuePath($stream, $attributePath);
+        return $attributePath;
     }
 
     /**
      * @inheritDoc
-     *
-     * @return AST\Node|AST\Path|null
      */
-    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false)
+    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false): ?AST\Node
     {
         // @codeCoverageIgnoreStart
         if ($inValuePath === false) {
             throw new \LogicException('This method should only be called when parsing a value path.');
         }
+
         // @codeCoverageIgnoreEnd
 
-        try {
-            return parent::parseInner($stream, $inValuePath);
-        } catch (\Nette\Tokenizer\Exception $ex) {
-            throw new InvalidValuePathException($stream);
-        }
+        return parent::parseInner($stream, $inValuePath);
     }
 
     /**
@@ -96,8 +68,8 @@ class PathParser extends AbstractParser implements PathParserInterface
         $valuePath = parent::parseValuePath($stream, $attributePath);
 
         // Sub attribute
-        if ($stream->hasNext()) {
-            $subAttr = $stream->matchNext(self::T_SUBATTR)->value;
+        if ($stream->isNext()) {
+            $subAttr = $stream->consumeToken(self::T_SUBATTR)->value;
 
             // Strip off the '.' at the start
             $subAttr = ltrim($subAttr, '.');

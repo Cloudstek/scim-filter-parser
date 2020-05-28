@@ -15,7 +15,7 @@ use PHPUnit\Framework\TestCase;
  * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
  * @covers \Cloudstek\SCIM\FilterParser\AST\Comparison
  */
-class ConnectiveTest extends TestCase
+class AbstractConnectiveTest extends TestCase
 {
     public function testCountable()
     {
@@ -73,6 +73,36 @@ class ConnectiveTest extends TestCase
         $conjunction = new AST\Conjunction($nodes, null);
 
         unset($conjunction[0]);
+    }
+
+    public function testArrayAccessWithNonNumericOffset()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected numeric offset.');
+
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        $conjunction['foo'];
+    }
+
+    public function testArrayAccessIssetWithNonNumericOffset()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected numeric offset.');
+
+        $nodes = [
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+        ];
+
+        $conjunction = new AST\Conjunction($nodes, null);
+
+        isset($conjunction['foo']);
     }
 
     public function testIterator()

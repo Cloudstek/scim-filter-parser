@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser;
 
-use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
-use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
+use Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException;
+use Nette\Tokenizer;
 
 /**
  * Abstract parser.
@@ -59,6 +59,9 @@ abstract class AbstractParser
             $patterns[self::T_SUBATTR] = '\.[\-\_a-z0-9]+$';
         }
 
+        // Sort patterns by key as constant value determines order.
+        ksort($patterns);
+
         $this->tokenizer = new Tokenizer\Tokenizer(
             $patterns,
             'i'
@@ -74,7 +77,7 @@ abstract class AbstractParser
      *
      * @return AST\Node|AST\Path|null
      */
-    public abstract function parse(string $input);
+    abstract public function parse(string $input);
 
     /**
      * Parse inner.
@@ -82,11 +85,11 @@ abstract class AbstractParser
      * @param Tokenizer\Stream $stream
      * @param bool             $inValuePath
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
-     * @return AST\Node|AST\Path|null
+     * @return AST\Node|null
      */
-    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false)
+    protected function parseInner(Tokenizer\Stream $stream, bool $inValuePath = false): ?AST\Node
     {
         $node = null;
 
@@ -107,8 +110,13 @@ abstract class AbstractParser
         } elseif ($stream->isNext(self::T_NAME)) {
             // Comparison or value path
             $node = $this->parseAttributePath($stream, $inValuePath);
+
+            if ($node instanceof AST\AttributePath) {
+                $node = $this->parseComparison($stream, $node);
+            }
         }
 
+        // Make sure we only return nodes, not paths.
         if ($node !== null && $node instanceof AST\Node) {
             // Logical connective
             if ($stream->isNext(self::T_LOG_OP)) {
@@ -118,17 +126,7 @@ abstract class AbstractParser
             return $node;
         }
 
-        if ($inValuePath === true) {
-            throw new InvalidValuePathException();
-        }
-
-        throw new TokenizerException(
-            sprintf(
-                'Expected an attribute/value path, opening parenthesis or a negation, got "%s".',
-                $stream->nextValue() ?? ''
-            ),
-            $stream
-        );
+        throw new UnexpectedValueException($stream);
     }
 
     /**
@@ -136,15 +134,15 @@ abstract class AbstractParser
      *
      * @param Tokenizer\Stream $stream
      *
-     * @throws \Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\Node|AST\Path|null
      */
     protected function parseParentheses(Tokenizer\Stream $stream)
     {
-        $stream->matchNext(self::T_PAREN_OPEN);
-        $filter = $stream->joinUntil(self::T_PAREN_CLOSE);
-        $stream->matchNext(self::T_PAREN_CLOSE);
+        $stream->consumeToken(self::T_PAREN_OPEN);
+        $filter = $this->joinUntilMatchingParenthesis($stream);
+        $stream->consumeToken(self::T_PAREN_CLOSE);
 
         if (empty($filter)) {
             return null;
@@ -159,16 +157,16 @@ abstract class AbstractParser
      * @param Tokenizer\Stream $stream
      * @param bool             $inValuePath
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\Node|null
      */
     protected function parseNegation(Tokenizer\Stream $stream, bool $inValuePath = false): ?AST\Node
     {
-        $stream->matchNext(self::T_NEGATION);
-        $stream->matchNext(self::T_PAREN_OPEN);
-        $filter = $stream->joinUntil(self::T_PAREN_CLOSE);
-        $stream->matchNext(self::T_PAREN_CLOSE);
+        $stream->consumeToken(self::T_NEGATION);
+        $stream->consumeToken(self::T_PAREN_OPEN);
+        $filter = $this->joinUntilMatchingParenthesis($stream);
+        $stream->consumeToken(self::T_PAREN_CLOSE);
 
         if (empty($filter)) {
             return null;
@@ -180,16 +178,6 @@ abstract class AbstractParser
             return null;
         }
 
-        if ($node instanceof AST\Node === false) {
-            throw new TokenizerException(
-                sprintf(
-                    'Invalid filter in negation, got "%s".',
-                    $stream->nextValue() ?? ''
-                ),
-                $stream
-            );
-        }
-
         return new AST\Negation($node);
     }
 
@@ -199,13 +187,13 @@ abstract class AbstractParser
      * @param Tokenizer\Stream $stream
      * @param bool             $inValuePath
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
-     * @return AST\Node
+     * @return AST\Path
      */
-    protected function parseAttributePath(Tokenizer\Stream $stream, bool $inValuePath = false): AST\Node
+    protected function parseAttributePath(Tokenizer\Stream $stream, bool $inValuePath = false): AST\Path
     {
-        $name = $stream->matchNext(self::T_NAME)->value;
+        $name = $stream->consumeToken(self::T_NAME)->value;
 
         // Attribute scheme
         $scheme = null;
@@ -223,14 +211,13 @@ abstract class AbstractParser
         // Value path (only if not in value path already
         if ($stream->isNext(self::T_BRACKET_OPEN)) {
             if ($inValuePath === true || count($attributePath) !== 1) {
-                throw new InvalidValuePathException($stream);
+                throw new UnexpectedValueException($stream);
             }
 
             return $this->parseValuePath($stream, $attributePath);
         }
 
-        // Comparison
-        return $this->parseComparison($stream, $attributePath);
+        return $attributePath;
     }
 
     /**
@@ -239,29 +226,29 @@ abstract class AbstractParser
      * @param Tokenizer\Stream  $stream
      * @param AST\AttributePath $attributePath
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\ValuePath
      */
     protected function parseValuePath(Tokenizer\Stream $stream, AST\AttributePath $attributePath): AST\ValuePath
     {
-        // Parse node between brackets.
-        $stream->matchNext(self::T_BRACKET_OPEN);
+        // Save position to report exception coordinates later
+        $startPos = $stream->position + 1;
 
+        // Parse
+        $stream->consumeToken(self::T_BRACKET_OPEN);
         $node = $this->parseInner($stream, true);
-
-        if (
-            $node instanceof AST\Connective === false
-            && $node instanceof AST\Comparison === false
-            && $node instanceof AST\Negation === false
-        ) {
-            throw new InvalidValuePathException($stream);
-        }
-
-        $stream->matchNext(self::T_BRACKET_CLOSE);
+        $stream->consumeToken(self::T_BRACKET_CLOSE);
 
         // Correct attribute path for node.
-        $this->updateValuePathAttributePath($attributePath, $node);
+        try {
+            $node = $this->updateValuePathAttributePath($attributePath, $node);
+        } catch (Tokenizer\Exception $ex) {
+            // Reset stream position to value path start to correct exception coordinates.
+            $stream->position = $startPos;
+
+            throw new UnexpectedValueException($stream);
+        }
 
         return new AST\ValuePath($attributePath, $node);
     }
@@ -272,7 +259,7 @@ abstract class AbstractParser
      * @param Tokenizer\Stream  $stream
      * @param AST\AttributePath $attributePath
      *
-     * @throws \Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\Connective|AST\Comparison
      */
@@ -280,11 +267,11 @@ abstract class AbstractParser
         Tokenizer\Stream $stream,
         AST\AttributePath $attributePath
     ) {
-        $operator = trim($stream->matchNext(self::T_COMP_OP)->value);
+        $operator = trim($stream->consumeValue(self::T_COMP_OP));
         $value = null;
 
         if (strcasecmp($operator, 'pr') <> 0) {
-            $value = $stream->matchNext(self::T_STRING, self::T_NUMBER, self::T_BOOL, self::T_NULL);
+            $value = $stream->consumeToken(self::T_STRING, self::T_NUMBER, self::T_BOOL, self::T_NULL);
 
             switch ($value->type) {
                 case self::T_STRING:
@@ -317,7 +304,7 @@ abstract class AbstractParser
      * @param AST\Node         $leftNode
      * @param bool             $inValuePath
      *
-     * @throws TokenizerException|\Nette\Tokenizer\Exception
+     * @throws Tokenizer\Exception
      *
      * @return AST\Connective
      */
@@ -326,15 +313,22 @@ abstract class AbstractParser
         AST\Node $leftNode,
         bool $inValuePath = false
     ): AST\Connective {
-        $logOp = trim($stream->matchNext(self::T_LOG_OP)->value);
+        // Logical operator
+        $logOp = trim($stream->consumeToken(self::T_LOG_OP)->value);
 
         $isConjunction = strcasecmp($logOp, 'and') === 0;
+
+        // Save position to report exception coordinates later
+        $startPos = $stream->position + 1;
 
         // Parse right hand node
         $rightNode = $this->parseInner($stream, $inValuePath);
 
-        if ($rightNode === null || $rightNode instanceof AST\Node === false) {
-            throw new TokenizerException('Invalid right hand side of comparison.', $stream);
+        if ($rightNode === null) {
+            // Reset stream position to value path start to correct exception coordinates.
+            $stream->position = $startPos;
+
+            throw new UnexpectedValueException($stream);
         }
 
         // Connective nodes
@@ -359,13 +353,13 @@ abstract class AbstractParser
      * Prepend attribute path to node.
      *
      * @param AST\AttributePath $attributePath
-     * @param AST\Node          $node
+     * @param AST\Node|null     $node
      *
-     * @throws TokenizerException
+     * @throws Tokenizer\Exception When node is null or not a valid node.
      *
      * @return AST\Node
      */
-    protected function updateValuePathAttributePath(AST\AttributePath $attributePath, AST\Node $node): AST\Node
+    protected function updateValuePathAttributePath(AST\AttributePath $attributePath, ?AST\Node $node): AST\Node
     {
         if ($node instanceof AST\Comparison) {
             $names = array_merge($attributePath->getNames(), $node->getAttributePath()->getNames());
@@ -389,6 +383,45 @@ abstract class AbstractParser
             return $node;
         }
 
-        throw new InvalidValuePathException();
+        throw new Tokenizer\Exception('Invalid value path.');
+    }
+
+    /**
+     * Join values until matching
+     *
+     * @param Tokenizer\Stream $stream
+     *
+     * @throws Tokenizer\Exception
+     * @return string
+     */
+    protected function joinUntilMatchingParenthesis(Tokenizer\Stream $stream): string
+    {
+        $pos = $stream->position + 1;
+        $numTokens = count($stream->tokens);
+        $level = 1;
+        $result = '';
+
+        if ($pos >= $numTokens) {
+            throw new Tokenizer\Exception('Unexpected end of string');
+        }
+
+        for ($i = $pos; $pos < $numTokens; $i++) {
+            $token = $stream->tokens[$i];
+
+            if ($token->type === self::T_PAREN_OPEN) {
+                $level++;
+            } elseif ($token->type === self::T_PAREN_CLOSE) {
+                $level--;
+
+                if ($level === 0) {
+                    $stream->position = $i - 1;
+                    break;
+                }
+            }
+
+            $result .= $token->value;
+        }
+
+        return $result;
     }
 }
