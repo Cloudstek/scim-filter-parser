@@ -21,8 +21,7 @@ class Negation extends AbstractNode
     {
         parent::__construct($parent);
 
-        $this->node = $node;
-        $this->node->setParent($this);
+        $this->setNode($node);
     }
 
     /**
@@ -41,10 +40,13 @@ class Negation extends AbstractNode
      * @param Node $node
      *
      * @return Negation
+     *
+     * @internal
      */
     public function setNode(Node $node): Negation
     {
         $this->node = $node;
+        $this->node->setParent($this);
 
         return $this;
     }

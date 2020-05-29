@@ -22,7 +22,7 @@ class Comparison extends AbstractNode
      * @param AttributePath              $attributePath
      * @param string|Operator            $operator
      * @param bool|float|int|string|null $value
-     * @param Node|null          $parent
+     * @param Node|null                  $parent
      *
      * @throws \UnexpectedValueException On invalid operator.
      */
@@ -51,6 +51,8 @@ class Comparison extends AbstractNode
      * @param AttributePath $attributePath
      *
      * @return Comparison
+     *
+     * @internal
      */
     public function setAttributePath(AttributePath $attributePath): Comparison
     {

@@ -6,6 +6,8 @@ namespace Cloudstek\SCIM\FilterParser;
 
 /**
  * SCIM Filter Parser interface.
+ *
+ * @see https://tools.ietf.org/html/rfc7644#section-3.4.2.2
  */
 interface FilterParserInterface
 {

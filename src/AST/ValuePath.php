@@ -7,7 +7,7 @@ namespace Cloudstek\SCIM\FilterParser\AST;
 /**
  * Value path.
  */
-class ValuePath extends AbstractNode
+class ValuePath extends AbstractNode implements Path
 {
     private AttributePath $attributePath;
 
@@ -20,13 +20,16 @@ class ValuePath extends AbstractNode
      * @param Node          $node
      * @param Node|null     $parent
      */
-    public function __construct(AttributePath $attributePath, Node $node, ?Node $parent = null)
-    {
+    public function __construct(
+        AttributePath $attributePath,
+        Node $node,
+        ?Node $parent = null
+    ) {
         parent::__construct($parent);
 
         $this->attributePath = $attributePath;
-        $this->node = $node;
 
+        $this->node = $node;
         $this->node->setParent($this);
     }
 
@@ -38,6 +41,22 @@ class ValuePath extends AbstractNode
     public function getAttributePath(): AttributePath
     {
         return $this->attributePath;
+    }
+
+    /**
+     * Set attribute path.
+     *
+     * @param AttributePath $attributePath
+     *
+     * @return ValuePath
+     *
+     * @internal
+     */
+    public function setAttributePath(AttributePath $attributePath): ValuePath
+    {
+        $this->attributePath = $attributePath;
+
+        return $this;
     }
 
     /**

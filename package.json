@@ -1,0 +1,9 @@
+{
+  "devDependencies": {
+    "docpress": "^0.8.1",
+    "markdown-it-textual-uml": "^0.1.3"
+  },
+  "scripts": {
+    "build-docs": "docpress build"
+  }
+}

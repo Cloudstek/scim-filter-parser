@@ -2,11 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Cloudstek\SCIM\FilterParser\Tests;
+namespace Cloudstek\SCIM\FilterParser\Tests\AST;
 
 use Cloudstek\SCIM\FilterParser\AST;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Attribute path test.
+ *
+ * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+ */
 class AttributePathTest extends TestCase
 {
     public function testInstantiateWithoutNames()
@@ -74,6 +79,26 @@ class AttributePathTest extends TestCase
         $attributePath = new AST\AttributePath('urn:foo:bar:2.0:baz', ['foo', 'bar']);
 
         unset($attributePath[0]);
+    }
+
+    public function testArrayAccessWithNonNumericOffset()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected numeric offset.');
+
+        $attributePath = new AST\AttributePath('urn:foo:bar:2.0:baz', ['foo', 'bar']);
+
+        $attributePath['foo'];
+    }
+
+    public function testArrayAccessIssetWithNonNumericOffset()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Expected numeric offset.');
+
+        $attributePath = new AST\AttributePath('urn:foo:bar:2.0:baz', ['foo', 'bar']);
+
+        isset($attributePath['foo']);
     }
 
     public function testIterator()

@@ -42,6 +42,10 @@ abstract class AbstractConnective extends AbstractNode implements Connective
      */
     public function offsetExists($offset)
     {
+        if (is_int($offset) === false) {
+            throw new \InvalidArgumentException('Expected numeric offset.');
+        }
+
         return isset($this->nodes[$offset]);
     }
 
@@ -50,6 +54,10 @@ abstract class AbstractConnective extends AbstractNode implements Connective
      */
     public function offsetGet($offset)
     {
+        if (is_int($offset) === false) {
+            throw new \InvalidArgumentException('Expected numeric offset.');
+        }
+
         return $this->nodes[$offset];
     }
 

@@ -1,7 +1,15 @@
+# PhpStorm
 .idea/
-vendor/
+
+# Generated documentation
+_docpress/
+
+# Generated content
+/.phpunit.result.cache
 build/
 
-/.phpunit.result.cache
-
+# Vendor files
+vendor/
+node_modules/
 /composer.lock
+/yarn.lock
