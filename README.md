@@ -1,7 +1,7 @@
 # SCIM Filter Parser
 > Parser for the SCIM ([IETF RFC 7644, System for Cross-domain Identity Management](https://tools.ietf.org/html/rfc7644)) filter syntax.
 
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Cloudstek/scim-filter-parser/PHPunit%20Tests)](https://github.com/Cloudstek/scim-filter-parser/actions) [![Coverage Status](https://coveralls.io/repos/github/Cloudstek/scim-filter-parser/badge.svg?branch=master)](https://coveralls.io/github/Cloudstek/scim-filter-parser?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/?branch=master) [![GitHub](https://img.shields.io/github/license/Cloudstek/scim-filter-parser)](./LICENSE) [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Cloudstek/scim-filter-parser?label=latest&sort=semver)](https://github.com/Cloudstek/scim-filter-parser/releases) [![Packagist Downloads](https://img.shields.io/packagist/dt/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser) [![Packagist Stars](https://img.shields.io/packagist/stars/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser)
+[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/Cloudstek/scim-filter-parser/PHPunit%20Tests)](https://github.com/Cloudstek/scim-filter-parser/actions) [![Coverage Status](https://coveralls.io/repos/github/Cloudstek/scim-filter-parser/badge.svg?branch=master)](https://coveralls.io/github/Cloudstek/scim-filter-parser?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/Cloudstek/scim-filter-parser/?branch=master) ![GitHub](https://img.shields.io/github/license/Cloudstek/scim-filter-parser) [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/Cloudstek/scim-filter-parser?label=latest&sort=semver)](https://github.com/Cloudstek/scim-filter-parser/releases) [![Packagist Downloads](https://img.shields.io/packagist/dt/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser) [![Packagist Stars](https://img.shields.io/packagist/stars/cloudstek/scim-filter-parser)](https://packagist.org/packages/cloudstek/scim-filter-parser)
 
 ## Installation
 
@@ -11,7 +11,7 @@ This library is available as [composer](https://getcomposer.org/) package and th
 $ composer require cloudstek/scim-filter-parser
 ```
 
-### Manual installation
+#### Manual installation
 
 If you don't use composer, you can install this library manually using the following steps:
 
@@ -44,8 +44,6 @@ $pathParser = new PathParser();
 // Parse a path string, used in for example PATCH operations.
 $pathAst = $pathParser->parse('name[given eq "John"].familyName'); // Cloudstek\SCIM\FilterParser\AST\ValuePath ...
 ```
-
-Documentation explaining the different AST nodes has yet to be written. For now, please see the unit tests in the [tests](./tests) directory for more examples or see the [IETF RFC 7644](https://tools.ietf.org/html/rfc7644#section-3.4.2.2) section 3.4.2.2 for more information about the filter syntax.
 
 ## Issues
 

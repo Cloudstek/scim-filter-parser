@@ -1,0 +1,101 @@
+@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:200,300,400,700');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;700&display=swap');
+
+* {
+    text-rendering: optimizelegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale
+}
+
+html .header-nav,
+html .footer-nav,
+html .markdown-body,
+html .toc-menu {
+    font-family: 'source sans pro', sans-serif !important;
+}
+
+html .markdown-body code {
+    font-family: 'Fira Code', monospace;
+    background: linear-gradient(to bottom, transparent 15%, rgba(47, 167, 143, 0.03) 15%, rgba(47, 167, 143, 0.03) 85%, transparent 85%);
+    margin: 0 .05em;
+}
+
+html .markdown-body pre code,
+html .markdown-body p code,
+html .markdown-body h4 code{
+    background: 0 0;
+}
+
+html .markdown-body h4 code::before,
+html .markdown-body h4 code::after {
+    display: none;
+}
+
+html .markdown-body h4 a {
+    color: inherit;
+    font-weight: inherit;
+    text-decoration: underline;
+}
+
+html .markdown-body h3 + p,
+html .markdown-body h4 + p {
+    margin-top: -.9em;
+}
+
+html .markdown-body pre {
+    padding: 24px;
+    box-shadow: inset 1px 1px rgba(0, 0, 0, .04);
+    background: #fafbfb
+}
+
+html .markdown-body h1, html .markdown-body h2, html .markdown-body h3, html .markdown-body h4 {
+    font-family: source sans pro, sans-serif;
+    font-weight: 300;
+    color: #25a
+}
+
+html .markdown-body a {
+    font-weight: 700;
+}
+
+html .markdown-body {
+    line-height: 1.7
+}
+
+html .markdown-body .file-heading {
+    font-weight: 700;
+    font-size: .95em;
+    padding-bottom: 16px;
+    margin-bottom: 0;
+    overflow: hidden;
+    height: 1.3em;
+    box-sizing: content-box;
+    white-space: nowrap
+}
+
+html .markdown-body .file-heading code {
+    background: 0 0;
+    box-shadow: none;
+    margin: 0;
+    padding: 0
+}
+
+html .markdown-body .file-heading code:before, html .markdown-body .file-heading code:after {
+    display: none
+}
+
+html .markdown-body .file-heading + pre {
+    margin-top: 0
+}
+
+html .markdown-body .file-heading:before {
+    display: inline-block;
+    vertical-align: middle;
+    content: "";
+    font-family: Ionicons;
+    font-weight: 400;
+    font-size: 167x;
+    width: 18px;
+    color: #999;
+    margin-top: -1px
+}

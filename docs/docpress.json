@@ -1,0 +1,13 @@
+{
+    "github": "Cloudstek/scim-filter-parser",
+    "css": [
+        "docs/style.css"
+    ],
+    "markdown": {
+        "breaks": true,
+        "plugins": {
+            "textual-uml": {},
+            "decorate": {}
+        }
+    }
+}
