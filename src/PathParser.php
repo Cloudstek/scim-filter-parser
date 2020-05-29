@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser;
 
-use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
-use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
 use Cloudstek\SCIM\FilterParser\Exception\UnexpectedValueException;
 use Nette\Tokenizer;
 

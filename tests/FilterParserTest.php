@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Cloudstek\SCIM\FilterParser\Tests;
 
 use Cloudstek\SCIM\FilterParser\AST;
-use Cloudstek\SCIM\FilterParser\Exception\InvalidValuePathException;
 use Cloudstek\SCIM\FilterParser\FilterParser;
 use Cloudstek\SCIM\FilterParser\FilterParserInterface;
 use Nette\Tokenizer;
