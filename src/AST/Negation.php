@@ -40,6 +40,8 @@ class Negation extends AbstractNode
      * @param Node $node
      *
      * @return Negation
+     *
+     * @internal
      */
     public function setNode(Node $node): Negation
     {

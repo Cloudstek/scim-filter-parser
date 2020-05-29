@@ -51,6 +51,8 @@ class Comparison extends AbstractNode
      * @param AttributePath $attributePath
      *
      * @return Comparison
+     *
+     * @internal
      */
     public function setAttributePath(AttributePath $attributePath): Comparison
     {
