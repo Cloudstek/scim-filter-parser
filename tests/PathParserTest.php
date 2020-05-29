@@ -465,7 +465,7 @@ class PathParserTest extends TestCase
         $this->assertInstanceOf(AST\ValuePath::class, $node);
         $this->assertNull($node->getParent());
 
-        $this->assertEquals(new AST\AttributePath(null, ['name']), $node->getAttributePath());
+        $this->assertEquals(new AST\AttributePath(null, ['name', 'baz']), $node->getAttributePath());
 
         /** @var AST\Comparison $comparison */
         $comparison = $node->getNode();
@@ -474,8 +474,6 @@ class PathParserTest extends TestCase
         $this->assertEquals(new AST\AttributePath(null, ['name', 'foo']), $comparison->getAttributePath());
         $this->assertSame((string)AST\Operator::EQ(), (string)$comparison->getOperator());
         $this->assertSame('bar', $comparison->getValue());
-
-        $this->assertSame($node->getSubAttribute(), 'baz');
     }
 
     public function testValuePathWithSubAttributeShouldBeEndOfPath()

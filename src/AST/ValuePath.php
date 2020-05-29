@@ -11,8 +11,6 @@ class ValuePath extends AbstractNode implements Path
 {
     private AttributePath $attributePath;
 
-    private ?string $subAttribute;
-
     private Node $node;
 
     /**
@@ -20,19 +18,16 @@ class ValuePath extends AbstractNode implements Path
      *
      * @param AttributePath $attributePath
      * @param Node          $node
-     * @param string|null   $subAttribute
      * @param Node|null     $parent
      */
     public function __construct(
         AttributePath $attributePath,
         Node $node,
-        ?string $subAttribute = null,
         ?Node $parent = null
     ) {
         parent::__construct($parent);
 
         $this->attributePath = $attributePath;
-        $this->subAttribute = $subAttribute;
 
         $this->node = $node;
         $this->node->setParent($this);
@@ -49,30 +44,19 @@ class ValuePath extends AbstractNode implements Path
     }
 
     /**
-     * Get sub attribute.
+     * Set attribute path.
      *
-     * Paths in PATCH requests can have a value path followed by a sub attribute.
-     *
-     * @return string|null
-     */
-    public function getSubAttribute(): ?string
-    {
-        return $this->subAttribute;
-    }
-
-    /**
-     * Return a new ValuePath with sub attribute.
-     *
-     * @param string $subAttribute
+     * @param AttributePath $attributePath
      *
      * @return ValuePath
+     *
+     * @internal
      */
-    public function withSubAttribute(string $subAttribute): ValuePath
+    public function setAttributePath(AttributePath $attributePath): ValuePath
     {
-        $self = clone($this);
-        $self->subAttribute = $subAttribute;
+        $this->attributePath = $attributePath;
 
-        return $self;
+        return $this;
     }
 
     /**

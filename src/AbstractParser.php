@@ -364,7 +364,12 @@ abstract class AbstractParser
         if ($node instanceof AST\Comparison) {
             $names = array_merge($attributePath->getNames(), $node->getAttributePath()->getNames());
 
-            $node->setAttributePath(new AST\AttributePath($attributePath->getSchema(), $names));
+            $node->setAttributePath(
+                new AST\AttributePath(
+                    $attributePath->getSchema(),
+                    $names
+                )
+            );
 
             return $node;
         }

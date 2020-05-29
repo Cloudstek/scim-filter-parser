@@ -74,8 +74,16 @@ class PathParser extends AbstractParser implements PathParserInterface
             // Strip off the '.' at the start
             $subAttr = ltrim($subAttr, '.');
 
-            // NOTE: T_SUBATTR matches end of string so no need to check if stream is at the end.
-            return $valuePath->withSubAttribute($subAttr);
+            // Append to attribute path.
+            $names = $attributePath->getNames();
+            $names[] = $subAttr;
+
+            $valuePath->setAttributePath(
+                new AST\AttributePath(
+                    $attributePath->getSchema(),
+                    $names
+                )
+            );
         }
 
         return $valuePath;
