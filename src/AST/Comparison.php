@@ -14,24 +14,28 @@ class Comparison extends AbstractNode
     private Operator $operator;
 
     /** @var bool|string|int|float|null */
-    private $value;
+    private string|int|bool|null|float $value;
 
     /**
      * Comparison.
      *
      * @param AttributePath              $attributePath
      * @param string|Operator            $operator
-     * @param bool|float|int|string|null $value
+     * @param float|bool|int|string|null $value
      * @param Node|null                  $parent
      *
      * @throws \UnexpectedValueException On invalid operator.
      */
-    public function __construct(AttributePath $attributePath, $operator, $value, ?Node $parent = null)
-    {
+    public function __construct(
+        AttributePath $attributePath,
+        Operator|string $operator,
+        float|bool|int|string|null $value,
+        ?Node $parent = null
+    ) {
         parent::__construct($parent);
 
         $this->attributePath = $attributePath;
-        $this->operator = Operator::get($operator);
+        $this->operator = $operator instanceof Operator ? $operator : Operator::from($operator);
         $this->value = $value;
     }
 
@@ -50,9 +54,9 @@ class Comparison extends AbstractNode
      *
      * @param AttributePath $attributePath
      *
+     * @internal
      * @return Comparison
      *
-     * @internal
      */
     public function setAttributePath(AttributePath $attributePath): Comparison
     {
@@ -76,7 +80,7 @@ class Comparison extends AbstractNode
      *
      * @return bool|float|int|string|null
      */
-    public function getValue()
+    public function getValue(): float|bool|int|string|null
     {
         return $this->value;
     }

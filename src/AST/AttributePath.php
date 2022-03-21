@@ -65,7 +65,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
     /**
      * @inheritDoc
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if (is_int($offset) === false) {
             throw new \InvalidArgumentException('Expected numeric offset.');
@@ -77,7 +77,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
     /**
      * @inheritDoc
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (is_int($offset) === false) {
             throw new \InvalidArgumentException('Expected numeric offset.');
@@ -89,7 +89,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
     /**
      * @inheritDoc
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new \LogicException('Attribute path is read-only.');
     }
@@ -97,7 +97,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
     /**
      * @inheritDoc
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new \LogicException('Attribute path is read-only.');
     }
@@ -105,7 +105,7 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
     /**
      * @inheritDoc
      */
-    public function count()
+    public function count(): int
     {
         return count($this->names);
     }
@@ -113,12 +113,12 @@ class AttributePath implements \ArrayAccess, \IteratorAggregate, \Countable, Pat
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->names);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->getPath();
     }

@@ -1,6 +1,6 @@
 # Operator
 
-[Enumeration](https://github.com/Cloudstek/php-enum) of the different supported [Comparison](./comparison.md) operators.
+Enumeration of the different supported [Comparison](./comparison.md) operators.
 
 The list and meaning of the operators supported by default can be found in the [RFC here](https://tools.ietf.org/html/rfc7644#section-3.4.2.2).
 
@@ -14,7 +14,7 @@ To support a custom operator you will need to extend the Operator enum to add yo
 
 <!-- {.file-heading} -->
 
-Extend the Operator enum class to add your own operators. Make sure to keep the class `@method` docblocks to have your IDE autocomplete the methods. For more information about the enumeration implementation, [see its documentation](https://github.com/Cloudstek/php-enum).
+Extend the Operator enum class to add your own operators.
 
 ```php
 <?php
@@ -25,24 +25,11 @@ use Cloudstek\SCIM\FilterParser\AST\Operator;
 
 /**
  * My comparison operator.
- *
- * @method static static EQ()
- * @method static static NE()
- * @method static static CO()
- * @method static static SW()
- * @method static static EW()
- * @method static static GT()
- * @method static static LT()
- * @method static static GE()
- * @method static static LE()
- * @method static static PR()
- * 
- * @method static static REGEX()
  */
-class MyOperator extends Operator
+enum MyOperator: string extends Operator
 {
     // Custom 'regex' operator.
-    private const REGEX = 'regex';
+    case REGEX = 'regex';
 }
 ```
 
@@ -72,9 +59,9 @@ class MyComparison extends Comparison
      *
      * @throws \UnexpectedValueException On invalid operator.
      */
-    public function __construct(AttributePath $attributePath, $operator, $value, ?Node $parent = null)
+    public function __construct(AttributePath $attributePath, string|MyOperator $operator, $value, ?Node $parent = null)
     {
-        $myOperator = MyOperator::get($operator);
+        $myOperator = $operator instanceof MyOperator ? $operator : MyOperator::from($operator);
 
         parent::__construct($attributePath, $myOperator, $value, $parent);
     }

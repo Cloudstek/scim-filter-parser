@@ -16,7 +16,7 @@ class FilterParser extends AbstractParser implements FilterParserInterface
      */
     public function __construct()
     {
-        parent::__construct(ParserMode::FILTER());
+        parent::__construct(ParserMode::FILTER);
     }
 
     /**

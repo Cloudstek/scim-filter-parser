@@ -48,8 +48,6 @@ abstract class AbstractNode implements Node
             return $this->parent !== null;
         }
 
-        $foundParent = false;
-
         if ($parent instanceof Node) {
             $foundParent = $this->parent === $parent;
         } else {

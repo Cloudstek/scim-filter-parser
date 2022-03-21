@@ -4,32 +4,28 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser\AST;
 
-use Cloudstek\Enum\Enum;
-
 /**
  * Comparison operator.
- *
- * @method static static EQ()
- * @method static static NE()
- * @method static static CO()
- * @method static static SW()
- * @method static static EW()
- * @method static static GT()
- * @method static static LT()
- * @method static static GE()
- * @method static static LE()
- * @method static static PR()
  */
-class Operator extends Enum
+enum Operator: string
 {
-    private const EQ = 'eq';
-    private const NE = 'ne';
-    private const CO = 'co';
-    private const SW = 'sw';
-    private const EW = 'ew';
-    private const GT = 'gt';
-    private const LT = 'lt';
-    private const GE = 'ge';
-    private const LE = 'le';
-    private const PR = 'pr';
+    case EQ = 'eq';
+
+    case NE = 'ne';
+
+    case CO = 'co';
+
+    case SW = 'sw';
+
+    case EW = 'ew';
+
+    case GT = 'gt';
+
+    case LT = 'lt';
+
+    case GE = 'ge';
+
+    case LE = 'le';
+
+    case PR = 'pr';
 }
