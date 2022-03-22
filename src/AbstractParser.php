@@ -55,7 +55,7 @@ abstract class AbstractParser
             self::T_NAME => '(?:(?:[^\"]+\:)+)?[\-\_a-z0-9]+(?:\.[\-\_a-z0-9]+)?',
         ];
 
-        if ($mode === ParserMode::PATH()) {
+        if ($mode === ParserMode::PATH) {
             $patterns[self::T_SUBATTR] = '\.[\-\_a-z0-9]+$';
         }
 

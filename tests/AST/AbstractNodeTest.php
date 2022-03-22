@@ -21,8 +21,8 @@ class AbstractNodeTest extends TestCase
     public function testHasParent()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -38,8 +38,8 @@ class AbstractNodeTest extends TestCase
     public function testHasParentFqcn()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -55,8 +55,8 @@ class AbstractNodeTest extends TestCase
     public function testHasParentInstance()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -72,8 +72,8 @@ class AbstractNodeTest extends TestCase
     public function testHasParentRecursive()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -89,8 +89,8 @@ class AbstractNodeTest extends TestCase
     public function testHasParentFqcnRecursive()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);

@@ -20,8 +20,8 @@ class AbstractConnectiveTest extends TestCase
     public function testCountable()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -32,8 +32,8 @@ class AbstractConnectiveTest extends TestCase
     public function testArrayAccess()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -51,13 +51,13 @@ class AbstractConnectiveTest extends TestCase
         $this->expectExceptionMessage('Conjunction is read-only.');
 
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
 
-        $conjunction[0] = new AST\Comparison(new AST\AttributePath(null, ['bar']), AST\Operator::EQ(), 'baz');
+        $conjunction[0] = new AST\Comparison(new AST\AttributePath(null, ['bar']), AST\Operator::EQ, 'baz');
     }
 
     public function testArrayAccessUnsetException()
@@ -66,8 +66,8 @@ class AbstractConnectiveTest extends TestCase
         $this->expectExceptionMessage('Conjunction is read-only.');
 
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -81,8 +81,8 @@ class AbstractConnectiveTest extends TestCase
         $this->expectExceptionMessage('Expected numeric offset.');
 
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -96,8 +96,8 @@ class AbstractConnectiveTest extends TestCase
         $this->expectExceptionMessage('Expected numeric offset.');
 
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);
@@ -108,8 +108,8 @@ class AbstractConnectiveTest extends TestCase
     public function testIterator()
     {
         $nodes = [
-            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ(), 'baz'),
-            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR(), null)
+            new AST\Comparison(new AST\AttributePath(null, ['foo', 'bar']), AST\Operator::EQ, 'baz'),
+            new AST\Comparison(new AST\AttributePath(null, ['baz']), AST\Operator::PR, null)
         ];
 
         $conjunction = new AST\Conjunction($nodes, null);

@@ -17,7 +17,7 @@ class PathParser extends AbstractParser implements PathParserInterface
      */
     public function __construct()
     {
-        parent::__construct(ParserMode::PATH());
+        parent::__construct(ParserMode::PATH);
     }
 
     /**

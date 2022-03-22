@@ -40,7 +40,7 @@ abstract class AbstractConnective extends AbstractNode implements Connective
     /**
      * @inheritDoc
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         if (is_int($offset) === false) {
             throw new \InvalidArgumentException('Expected numeric offset.');
@@ -52,7 +52,7 @@ abstract class AbstractConnective extends AbstractNode implements Connective
     /**
      * @inheritDoc
      */
-    public function offsetGet($offset)
+    public function offsetGet($offset): mixed
     {
         if (is_int($offset) === false) {
             throw new \InvalidArgumentException('Expected numeric offset.');
@@ -64,7 +64,7 @@ abstract class AbstractConnective extends AbstractNode implements Connective
     /**
      * @inheritDoc
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
         throw new \LogicException('Conjunction is read-only.');
     }
@@ -72,7 +72,7 @@ abstract class AbstractConnective extends AbstractNode implements Connective
     /**
      * @inheritDoc
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
         throw new \LogicException('Conjunction is read-only.');
     }
@@ -80,7 +80,7 @@ abstract class AbstractConnective extends AbstractNode implements Connective
     /**
      * @inheritDoc
      */
-    public function count()
+    public function count(): int
     {
         return count($this->nodes);
     }
@@ -88,7 +88,7 @@ abstract class AbstractConnective extends AbstractNode implements Connective
     /**
      * @inheritDoc
      */
-    public function getIterator()
+    public function getIterator(): \Traversable
     {
         return new \ArrayIterator($this->nodes);
     }

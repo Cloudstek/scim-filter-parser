@@ -105,7 +105,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $negatedNode);
         $this->assertSame($node, $negatedNode->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'formatted']), $negatedNode->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$negatedNode->getOperator());
+        $this->assertSame(AST\Operator::EQ, $negatedNode->getOperator());
         $this->assertSame('foobar', $negatedNode->getValue());
     }
 
@@ -153,14 +153,14 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'formatted']),
             $conjunctionNodes[0]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[0]->getOperator());
         $this->assertSame('foobar', $conjunctionNodes[0]->getValue());
 
         // Conjunction (right) family eq "bar"
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[1]);
         $this->assertSame($negatedNode, $conjunctionNodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'family']), $conjunctionNodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[1]->getOperator());
         $this->assertSame('bar', $conjunctionNodes[1]->getValue());
     }
 
@@ -184,7 +184,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $subNode);
         $this->assertSame($node, $subNode->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $subNode->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$subNode->getOperator());
+        $this->assertSame(AST\Operator::EQ, $subNode->getOperator());
         $this->assertSame('foobar', $subNode->getValue());
     }
 
@@ -239,14 +239,14 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $nodes[0]);
         $this->assertSame($conjunction, $nodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $nodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$nodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $nodes[0]->getOperator());
         $this->assertSame('foobar', $nodes[0]->getValue());
 
         // Comparison (right) numActivations ge 3
         $this->assertInstanceOf(AST\Comparison::class, $nodes[1]);
         $this->assertSame($conjunction, $nodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $nodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
+        $this->assertSame(AST\Operator::GE, $nodes[1]->getOperator());
         $this->assertSame(3, $nodes[1]->getValue());
     }
 
@@ -284,14 +284,14 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $nodes[0]);
         $this->assertSame($conjunction, $nodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'formatted']), $nodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$nodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $nodes[0]->getOperator());
         $this->assertSame('foobar', $nodes[0]->getValue());
 
         // Comparison (right) length ge 3
         $this->assertInstanceOf(AST\Comparison::class, $nodes[1]);
         $this->assertSame($conjunction, $nodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'length']), $nodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
+        $this->assertSame(AST\Operator::GE, $nodes[1]->getOperator());
         $this->assertSame(3, $nodes[1]->getValue());
     }
 
@@ -318,14 +318,14 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $nodes[0]);
         $this->assertSame($disjunction, $nodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $nodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$nodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $nodes[0]->getOperator());
         $this->assertSame('foobar', $nodes[0]->getValue());
 
         // Comparison (right) numActivations ge 3
         $this->assertInstanceOf(AST\Comparison::class, $nodes[1]);
         $this->assertSame($disjunction, $nodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $nodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
+        $this->assertSame(AST\Operator::GE, $nodes[1]->getOperator());
         $this->assertSame(3, $nodes[1]->getValue());
     }
 
@@ -363,14 +363,14 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $nodes[0]);
         $this->assertSame($disjunction, $nodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'formatted']), $nodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$nodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $nodes[0]->getOperator());
         $this->assertSame('foobar', $nodes[0]->getValue());
 
         // Comparison (right) length ge 3
         $this->assertInstanceOf(AST\Comparison::class, $nodes[1]);
         $this->assertSame($disjunction, $nodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'length']), $nodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
+        $this->assertSame(AST\Operator::GE, $nodes[1]->getOperator());
         $this->assertSame(3, $nodes[1]->getValue());
     }
 
@@ -404,21 +404,21 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[0]);
         $this->assertSame($disjunctionNodes[0], $conjunctionNodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $conjunctionNodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[0]->getOperator());
         $this->assertSame('foobar', $conjunctionNodes[0]->getValue());
 
         // Grouped conjunction omparison (right) numActivation ge 3
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[1]);
         $this->assertSame($disjunctionNodes[0], $conjunctionNodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $conjunctionNodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::GE(), (string)$conjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::GE, $conjunctionNodes[1]->getOperator());
         $this->assertSame(3, $conjunctionNodes[1]->getValue());
 
         // Ungrouped disjunction comparison (right) userName eq "bar"
         $this->assertInstanceOf(AST\Comparison::class, $disjunctionNodes[1]);
         $this->assertSame($disjunction, $disjunctionNodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $disjunctionNodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$disjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $disjunctionNodes[1]->getOperator());
         $this->assertSame('bar', $disjunctionNodes[1]->getValue());
     }
 
@@ -445,21 +445,21 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[0]);
         $this->assertSame($conjunction, $conjunctionNodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'first']), $conjunctionNodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[0]->getOperator());
         $this->assertSame('foo', $conjunctionNodes[0]->getValue());
 
         // Comparison (middle) name.middle eq "bar"
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[1]);
         $this->assertSame($conjunction, $conjunctionNodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'middle']), $conjunctionNodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[1]->getOperator());
         $this->assertSame('bar', $conjunctionNodes[1]->getValue());
 
         // Comparison (right) name.last eq "baz"
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[2]);
         $this->assertSame($conjunction, $conjunctionNodes[2]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'last']), $conjunctionNodes[2]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[2]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[2]->getOperator());
         $this->assertSame('baz', $conjunctionNodes[2]->getValue());
     }
 
@@ -499,7 +499,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'first']),
             $leftConjunctionNodes[0]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$leftConjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $leftConjunctionNodes[0]->getOperator());
         $this->assertSame('foo', $leftConjunctionNodes[0]->getValue());
 
         // Grouped conjunction comparison (right) name.middle eq "bar"
@@ -509,14 +509,14 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'middle']),
             $leftConjunctionNodes[1]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$leftConjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $leftConjunctionNodes[1]->getOperator());
         $this->assertSame('bar', $leftConjunctionNodes[1]->getValue());
 
         // Ungrouped conjunction comparison (right) name.last eq "baz"
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[1]);
         $this->assertSame($conjunction, $conjunctionNodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'last']), $conjunctionNodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[1]->getOperator());
         $this->assertSame('baz', $conjunctionNodes[1]->getValue());
     }
 
@@ -543,7 +543,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $conjunctionNodes[0]);
         $this->assertSame($conjunction, $conjunctionNodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'first']), $conjunctionNodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[0]->getOperator());
         $this->assertSame('foo', $conjunctionNodes[0]->getValue());
 
         // Conjunction disjunction (right)
@@ -564,7 +564,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'middle']),
             $disjunctionNodes[0]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$disjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $disjunctionNodes[0]->getOperator());
         $this->assertSame('bar', $disjunctionNodes[0]->getValue());
 
         // Disjunction comparison (right) name.last eq "baz"
@@ -574,7 +574,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'last']),
             $disjunctionNodes[1]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$disjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $disjunctionNodes[1]->getOperator());
         $this->assertSame('baz', $disjunctionNodes[1]->getValue());
     }
 
@@ -601,7 +601,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $disjunctionNodes[0]);
         $this->assertSame($disjunction, $disjunctionNodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'first']), $disjunctionNodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$disjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $disjunctionNodes[0]->getOperator());
         $this->assertSame('foo', $disjunctionNodes[0]->getValue());
 
         // Disjunction conjunction (right)
@@ -622,7 +622,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'middle']),
             $conjunctionNodes[0]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[0]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[0]->getOperator());
         $this->assertSame('bar', $conjunctionNodes[0]->getValue());
 
         // Conjunction comparison (right) name.last eq "baz"
@@ -632,7 +632,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath(null, ['name', 'last']),
             $conjunctionNodes[1]->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$conjunctionNodes[1]->getOperator());
+        $this->assertSame(AST\Operator::EQ, $conjunctionNodes[1]->getOperator());
         $this->assertSame('baz', $conjunctionNodes[1]->getValue());
     }
 
@@ -659,14 +659,14 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $nodes[0]);
         $this->assertSame($conjunction, $nodes[0]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $nodes[0]->getAttributePath());
-        $this->assertSame((string)AST\Operator::PR(), (string)$nodes[0]->getOperator());
+        $this->assertSame(AST\Operator::PR, $nodes[0]->getOperator());
         $this->assertNull($nodes[0]->getValue());
 
         // Comparison (right) numActivations ge 3
         $this->assertInstanceOf(AST\Comparison::class, $nodes[1]);
         $this->assertSame($conjunction, $nodes[1]->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $nodes[1]->getAttributePath());
-        $this->assertSame((string)AST\Operator::GE(), (string)$nodes[1]->getOperator());
+        $this->assertSame(AST\Operator::GE, $nodes[1]->getOperator());
         $this->assertSame(3, $nodes[1]->getValue());
     }
 
@@ -699,7 +699,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['userName']), $node->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame('foobar', $node->getValue());
     }
 
@@ -716,7 +716,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'formatted']), $node->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame('foobar', $node->getValue());
     }
 
@@ -741,7 +741,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertSame($valuePath, $node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['name', 'formatted']), $node->getAttributePath());
-        $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame('foobar', $node->getValue());
     }
 
@@ -761,7 +761,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User', ['userName']),
             $node->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame('foobar', $node->getValue());
     }
 
@@ -783,7 +783,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User', ['name', 'formatted']),
             $node->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame('foobar', $node->getValue());
     }
 
@@ -816,7 +816,7 @@ class FilterParserTest extends TestCase
             new AST\AttributePath('urn:ietf:params:scim:schemas:extension:enterprise:2.0:User', ['name', 'formatted']),
             $node->getAttributePath()
         );
-        $this->assertSame((string)AST\Operator::EQ(), (string)$node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame('foobar', $node->getValue());
     }
 
@@ -833,7 +833,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['activated']), $node->getAttributePath());
-        $this->assertSame(AST\Operator::EQ(), $node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertSame(true, $node->getValue());
     }
 
@@ -850,7 +850,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $node->getAttributePath());
-        $this->assertSame(AST\Operator::GE(), $node->getOperator());
+        $this->assertSame(AST\Operator::GE, $node->getOperator());
         $this->assertSame(3, $node->getValue());
     }
 
@@ -867,7 +867,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $node->getAttributePath());
-        $this->assertSame(AST\Operator::LT(), $node->getOperator());
+        $this->assertSame(AST\Operator::LT, $node->getOperator());
         $this->assertEqualsWithDelta(4.5, $node->getValue(), 0.0001);
     }
 
@@ -884,7 +884,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $node->getAttributePath());
-        $this->assertSame(AST\Operator::EQ(), $node->getOperator());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
         $this->assertNull($node->getValue());
     }
 
@@ -901,7 +901,7 @@ class FilterParserTest extends TestCase
         $this->assertInstanceOf(AST\Comparison::class, $node);
         $this->assertNull($node->getParent());
         $this->assertEquals(new AST\AttributePath(null, ['numActivations']), $node->getAttributePath());
-        $this->assertSame(AST\Operator::PR(), $node->getOperator());
+        $this->assertSame(AST\Operator::PR, $node->getOperator());
         $this->assertNull($node->getValue());
     }
     //endregion
