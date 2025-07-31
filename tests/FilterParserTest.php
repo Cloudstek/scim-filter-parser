@@ -748,6 +748,31 @@ class FilterParserTest extends TestCase
     /**
      * @covers \Cloudstek\SCIM\FilterParser\AST\AbstractNode
      * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
+     * @covers \Cloudstek\SCIM\FilterParser\AST\ValuePath
+     * @covers \Cloudstek\SCIM\FilterParser\AST\Comparison
+     */
+    public function testCompareStringDollarValuePath()
+    {
+        /** @var AST\ValuePath $valuePath */
+        $valuePath = self::$parser->parse('members[$ref eq "https://example.com/v2/Users/71ddacd2-a8e7-49b8-a5db-ae50d0a5bfd7"]');
+
+        $this->assertInstanceOf(AST\ValuePath::class, $valuePath);
+        $this->assertNull($valuePath->getParent());
+        $this->assertEquals(new AST\AttributePath(null, ['members']), $valuePath->getAttributePath());
+
+        /** @var AST\Comparison $node */
+        $node = $valuePath->getNode();
+
+        $this->assertInstanceOf(AST\Comparison::class, $node);
+        $this->assertSame($valuePath, $node->getParent());
+        $this->assertEquals(new AST\AttributePath(null, ['members', '$ref']), $node->getAttributePath());
+        $this->assertSame(AST\Operator::EQ, $node->getOperator());
+        $this->assertSame('https://example.com/v2/Users/71ddacd2-a8e7-49b8-a5db-ae50d0a5bfd7', $node->getValue());
+    }
+
+    /**
+     * @covers \Cloudstek\SCIM\FilterParser\AST\AbstractNode
+     * @covers \Cloudstek\SCIM\FilterParser\AST\AttributePath
      * @covers \Cloudstek\SCIM\FilterParser\AST\Comparison
      */
     public function testCompareStringScheme()
