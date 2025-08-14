@@ -42,7 +42,7 @@ abstract class AbstractParser
     {
         $patterns = [
             self::T_NUMBER => '\d+(?:\.\d+)?',
-            self::T_STRING => '\"[^\"]*\"',
+            self::T_STRING => '"(?:(?:(?=\\\\)\\\\(?:["\\\\\/bfnrt]|u[0-9a-fA-F]{4}))|[^"\\\\\0-\x1F\x7F]+)*"',
             self::T_BOOL => 'true|false',
             self::T_NULL => 'null',
             self::T_PAREN_OPEN => '\(',
@@ -275,7 +275,7 @@ abstract class AbstractParser
 
             switch ($value->type) {
                 case self::T_STRING:
-                    $value = trim($value->value, '"');
+                    $value = json_decode($value->value, flags: JSON_THROW_ON_ERROR);
                     break;
                 case self::T_NUMBER:
                     if (strpos($value->value, '.') !== false) {
