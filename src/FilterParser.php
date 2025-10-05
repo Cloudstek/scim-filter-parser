@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser;
 
-use Nette\Tokenizer;
+use StellaMaris\Tokenizer;
 
 /**
  * SCIM Filter Parser.

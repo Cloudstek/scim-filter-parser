@@ -7,7 +7,7 @@ namespace Cloudstek\SCIM\FilterParser\Tests;
 use Cloudstek\SCIM\FilterParser\AST;
 use Cloudstek\SCIM\FilterParser\PathParser;
 use Cloudstek\SCIM\FilterParser\PathParserInterface;
-use Nette\Tokenizer;
+use StellaMaris\Tokenizer;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -179,7 +179,7 @@ class PathParserTest extends TestCase
      */
     public function testConjunctionThrowsException()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(\StellaMaris\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
             'Unexpected  eq  on line 1, column 9.'
         );
@@ -193,7 +193,7 @@ class PathParserTest extends TestCase
      */
     public function testDisjunctionThrowsException()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(\StellaMaris\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
             'Unexpected  eq  on line 1, column 9.'
         );
@@ -209,7 +209,7 @@ class PathParserTest extends TestCase
      */
     public function testComparisonThrowsException()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(\StellaMaris\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
             'Unexpected  eq  on line 1, column 9.'
         );
@@ -224,7 +224,7 @@ class PathParserTest extends TestCase
      */
     public function testSubAttributeComparisonThrowsException()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(\StellaMaris\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
             'Unexpected  eq  on line 1, column 15.'
         );
@@ -238,7 +238,7 @@ class PathParserTest extends TestCase
      */
     public function testAttributeWithSchemeComparisonThrowsException()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(\StellaMaris\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
             'Unexpected  eq  on line 1, column 68.'
         );
@@ -252,7 +252,7 @@ class PathParserTest extends TestCase
      */
     public function testSubAttributeWithSchemeComparisonThrowsException()
     {
-        $this->expectException(\Nette\Tokenizer\Exception::class);
+        $this->expectException(\StellaMaris\Tokenizer\Exception::class);
         $this->expectExceptionMessage(
             'Unexpected  eq  on line 1, column 74.'
         );

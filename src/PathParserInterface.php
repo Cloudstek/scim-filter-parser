@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Cloudstek\SCIM\FilterParser;
 
 use Cloudstek\SCIM\FilterParser\Exception\TokenizerException;
-use Nette\Tokenizer;
+use StellaMaris\Tokenizer;
 
 /**
  * SCIM Path Parser interface.

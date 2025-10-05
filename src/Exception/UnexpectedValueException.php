@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Cloudstek\SCIM\FilterParser\Exception;
 
-use Nette\Tokenizer;
+use StellaMaris\Tokenizer;
 
 /**
  * Unexpected value exception.

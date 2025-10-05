@@ -22,7 +22,7 @@
     },
     "require": {
         "php": "^8.1",
-        "nette/tokenizer": "^3.1"
+        "stella-maris/tokenizer": "^1.0.1"
 
     },
     "require-dev": {

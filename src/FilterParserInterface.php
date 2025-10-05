@@ -16,7 +16,7 @@ interface FilterParserInterface
      *
      * @param string $input SCIM filter.
      *
-     * @throws \Nette\Tokenizer\Exception
+     * @throws \StellaMaris\Tokenizer\Exception
      *
      * @return AST\Node|null
      */
